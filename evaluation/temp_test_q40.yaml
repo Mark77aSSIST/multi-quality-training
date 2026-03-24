@@ -1,0 +1,16 @@
+names:
+- pedestrian
+- people
+- bicycle
+- car
+- van
+- truck
+- tricycle
+- awning-tricycle
+- bus
+- motor
+nc: 10
+path: /content/drive/MyDrive/CCTV_MultiRes_Experiments/yolo_dataset
+test: images/test/q40
+train: images/train/q40
+val: images/test/q40
