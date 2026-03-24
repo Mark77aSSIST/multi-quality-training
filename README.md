@@ -64,8 +64,8 @@ We provide pre-trained models for reproducibility:
 
 | Model | Training Data | Q20 mAP | Q100 mAP | Download |
 |-------|---------------|---------|----------|----------|
-| YOLOv8m-Standard | Q100 only | 0.236 | 0.404 | [Link](https://github.com/Mark77aSSIST/multi-quality-training/blob/main/models/standard/best.pt) |
-| YOLOv8m-MultiQuality | Q20-Q100 | **0.337** | **0.406** | [Link](https://github.com/Mark77aSSIST/multi-quality-training/blob/main/models/multiQuality/best.pt) |
+| YOLOv8m-Standard | Q100 only | 0.236 | 0.404 | [Link](https://github.com/Mark77aSSIST/multi-quality-training/blob/main/models/standard) |
+| YOLOv8m-MultiQuality | Q20-Q100 | **0.337** | **0.406** | [Link](https://github.com/Mark77aSSIST/multi-quality-training/blob/main/models/multiQuality) |
 
 **Usage:**
 ```python
