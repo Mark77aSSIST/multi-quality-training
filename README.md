@@ -38,7 +38,7 @@ Mukeun Choi_1 and Taeyeon Oh_2*
 | `requirements.txt` | Library installation information required to run in a local environment |
 
 ## 🖼️ Multi-Quality Image Sample
-<img src="">
+<img src="https://github.com/Mark77aSSIST/multi-quality-training/blob/main/experiments/quality_demo_0000002_00005_d_0000014.jpg">
 
 ## 🔥 Key Results
 
