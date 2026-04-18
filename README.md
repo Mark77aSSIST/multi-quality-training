@@ -50,7 +50,6 @@ Mukeun Choi_1 and Taeyeon Oh_2*
 | Q80 | 0.408 | 0.410 | +0.4% |
 | Q100 | 0.404 | 0.406 | +0.4% |
 | **Avg** | **0.366** | **0.390** | **+6.5%** |
-| **Std** | **0.066** | **0.028** | **-58.2%** |
 
 ## 🚀 Quick Start
 1) Login to Google Colab environment (A100 GPU 40GB RAM)
