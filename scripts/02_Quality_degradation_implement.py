@@ -173,27 +173,71 @@ for split_name, split_dir in [('Train', config['TRAIN_DIR']),
 class QualityDegrader:
     QUALITY_LEVELS = [0.2, 0.4, 0.6, 0.8, 1.0]
 
+    JPEG_QUALITY_MAP = {
+        0.2: 20,   
+        0.4: 40,   
+        0.6: 60,   
+        0.8: 80,   
+        1.0: 100, 
+    }
+
     @staticmethod
-    def degrade_image(image, quality_level):
-        if quality_level == 1.0:
+    def get_jpeg_quality(quality_level):
+        if quality_level in QualityDegrader.JPEG_QUALITY_MAP:
+            return QualityDegrader.JPEG_QUALITY_MAP[quality_level]
+
+        # 매핑 테이블에 없는 값이 들어온 경우 선형 보간 (5~95 범위로 clip)
+        levels = sorted(QualityDegrader.JPEG_QUALITY_MAP.keys())
+        if quality_level <= levels[0]:
+            return QualityDegrader.JPEG_QUALITY_MAP[levels[0]]
+        if quality_level >= levels[-1]:
+            return QualityDegrader.JPEG_QUALITY_MAP[levels[-1]]
+
+        for lo, hi in zip(levels[:-1], levels[1:]):
+            if lo <= quality_level <= hi:
+                q_lo = QualityDegrader.JPEG_QUALITY_MAP[lo]
+                q_hi = QualityDegrader.JPEG_QUALITY_MAP[hi]
+                ratio = (quality_level - lo) / (hi - lo)
+                return int(round(q_lo + (q_hi - q_lo) * ratio))
+
+        return int(np.clip(quality_level * 100, 5, 95))
+
+    @staticmethod
+    def apply_jpeg_compression(image, jpeg_quality):
+        encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), int(jpeg_quality)]
+        success, encoded_buf = cv2.imencode('.jpg', image, encode_param)
+
+        if not success:
+            # 인코딩 실패 시 원본 반환 (안전장치)
             return image.copy()
 
-        h, w = image.shape[:2]
+        compressed_image = cv2.imdecode(encoded_buf, cv2.IMREAD_COLOR)
+        return compressed_image
 
-        # Downsampling
-        new_h = int(h * quality_level)
-        new_w = int(w * quality_level)
+    @staticmethod
+    def degrade_image(image, quality_level, apply_jpeg=True, jpeg_quality=None):
+        if quality_level == 1.0:
+            degraded = image.copy()
+        else:
+            h, w = image.shape[:2]
 
-        # Minimum image size
-        new_h = max(1, new_h)
-        new_w = max(1, new_w)
+            new_h = int(h * quality_level)
+            new_w = int(w * quality_level)
 
-        downsampled = cv2.resize(image, (new_w, new_h),
-                                interpolation=cv2.INTER_CUBIC)
+            # 최소 크기 보장
+            new_h = max(1, new_h)
+            new_w = max(1, new_w)
 
-        # Upsampling (Restore to original size)
-        degraded = cv2.resize(downsampled, (w, h),
-                             interpolation=cv2.INTER_CUBIC)
+            downsampled = cv2.resize(image, (new_w, new_h),
+                                    interpolation=cv2.INTER_CUBIC)
+
+            degraded = cv2.resize(downsampled, (w, h),
+                                 interpolation=cv2.INTER_CUBIC)
+
+        if apply_jpeg:
+            q = (jpeg_quality if jpeg_quality is not None
+                 else QualityDegrader.get_jpeg_quality(quality_level))
+            degraded = QualityDegrader.apply_jpeg_compression(degraded, q)
 
         return degraded
 
@@ -211,58 +255,3 @@ class QualityDegrader:
             'psnr': psnr,
             'mse': mse
         }
-
-# Visualization of the image quality degradation
-def visualize_quality_degradation(image_path, save_path=None):
-    img = cv2.imread(image_path)
-    if img is None:
-        print(f"Can't load an image: {image_path}")
-        return
-
-    img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-
-    # Create 5-levels Image Quality
-    fig, axes = plt.subplots(2, 3, figsize=(15, 10))
-    axes = axes.flatten()
-
-    for idx, quality in enumerate(QualityDegrader.QUALITY_LEVELS):
-        degraded = QualityDegrader.degrade_image(img_rgb, quality)
-        metrics = QualityDegrader.calculate_quality_metrics(img_rgb, degraded)
-
-        axes[idx].imshow(degraded)
-        axes[idx].set_title(f'Quality: {int(quality*100)}%\n'
-                           f'PSNR: {metrics["psnr"]:.2f} dB',
-                           fontsize=12)
-        axes[idx].axis('off')
-
-    axes[5].axis('off')
-
-    plt.tight_layout()
-
-    if save_path:
-        plt.savefig(save_path, dpi=150, bbox_inches='tight')
-        print(f"Saved: {save_path}")
-
-    plt.show()
-
-print("\n" + "=" * 80)
-print("Visualization of the image quality degradation")
-print("=" * 80)
-
-# Select a sample image in the Train set
-train_images_dir = os.path.join(config['TRAIN_DIR'], 'images')
-if os.path.exists(train_images_dir):
-    sample_images = sorted([f for f in os.listdir(train_images_dir)
-                           if f.endswith(('.jpg', '.png'))])[:3]
-
-    for img_file in sample_images:
-        img_path = os.path.join(train_images_dir, img_file)
-        save_path = os.path.join(config['EXPERIMENT_PATH'], 'results',
-                                f'quality_demo_{img_file}')
-
-        print(f"\n{img_file}")
-        visualize_quality_degradation(img_path, save_path)
-        break
-
-print("\nData analysis & Quality degradation implement Complete.")
-

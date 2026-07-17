@@ -1,0 +1,10 @@
+Folder,Experiment (clean key),Model Weights,Total Epoch,Total Time (hr),Best Epoch,Time to Reach Peak (hr),Best mAP50,Best mAP50-95
+exp1_standard_a100_20260709_041147,exp1_standard,yolov8m.pt,100,1.411,78,1.105,0.4305,0.2554
+exp2_multiquality_a100_20260709_053822,exp2_multiquality,yolov8m.pt,94,6.11,44,2.869,0.4329,0.2576
+expB1_q100aug5x_a100_20260710_123333,expB1_q100aug5x,yolov8m.pt,100,6.65,51,3.45,0.4404,0.2621
+expB2_random1x_a100_20260710_123333,expB2_random1x,yolov8m.pt,100,1.402,68,0.958,0.4211,0.2486
+expB3_random5x_a100_20260710_123333,expB3_random5x,yolov8m.pt,100,6.748,47,3.226,0.4375,0.2605
+exp_YOLO11m_MultiQuality_a100_20260713_233536,exp_YOLO11m_MultiQuality,yolo11m.pt,92,6.792,42,3.104,0.4491,0.2688
+exp_YOLO11m_Standard_a100_20260713_233536,exp_YOLO11m_Standard,yolo11m.pt,100,1.594,87,1.391,0.4486,0.2677
+exp_YOLOv8n_MultiQuality_a100_20260713_233536,exp_YOLOv8n_MultiQuality,yolov8n.pt,100,4.366,73,3.242,0.3295,0.1892
+exp_YOLOv8n_Standard_a100_20260712_055850,exp_YOLOv8n_Standard,yolov8n.pt,100,1.068,88,0.944,0.3207,0.182

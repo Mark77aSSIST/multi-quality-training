@@ -10,7 +10,7 @@ names:
 - bus
 - motor
 nc: 10
-path: /content/drive/MyDrive/CCTV_MultiRes_Experiments/yolo_dataset
+path: /content/drive/MyDrive/CCTV_MultiRes_Experiments_01_rev/yolo_dataset
 test: images/test/q40
 train: images/train/q40
 val: images/test/q40

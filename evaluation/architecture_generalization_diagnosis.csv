@@ -1,0 +1,4 @@
+Architecture,Robustness (Standard),Robustness (Multi-Quality),Robustness Improvement (×),mAP50@Q20 (Standard),mAP50@Q20 (Multi-Quality),Q20 Improvement (%p),Multi-Quality가 더 강건한가?
+YOLOv8m,3.89,8.84,2.27,0.1504,0.2628,11.24,✅
+YOLOv8n,4.63,8.72,1.88,0.1375,0.1958,5.83,✅
+YOLO11m,3.67,8.62,2.35,0.1468,0.2707,12.39,✅

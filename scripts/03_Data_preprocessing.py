@@ -46,7 +46,7 @@ def convert_visdrone_to_yolo_multiquality(
         image_files = image_files[:limit]
 
     print(f"\n{'='*80}")
-    print(f"🔄 {split_name.upper()} set reformating: {len(image_files)} image")
+    print(f" {split_name.upper()} set reformating: {len(image_files)} image")
     print(f"{'='*80}")
 
     stats = {
@@ -84,12 +84,13 @@ def convert_visdrone_to_yolo_multiquality(
         # Generation to 5-levels quality
         for quality in quality_levels:
             quality_tag = f'q{int(quality * 100)}'
+            jpeg_q = QualityDegrader.get_jpeg_quality(quality)
 
-            degraded_img = QualityDegrader.degrade_image(img, quality)
+            degraded_img = QualityDegrader.degrade_image(img, quality, apply_jpeg=True, jpeg_quality=jpeg_q)
 
             output_img_dir = os.path.join(output_dir, 'images', split_name, quality_tag)
             output_img_path = os.path.join(output_img_dir, img_file)
-            cv2.imwrite(output_img_path, degraded_img)
+            cv2.imwrite(output_img_path, degraded_img, [int(cv2.IMWRITE_JPEG_QUALITY), jpeg_q])
 
             output_label_dir = os.path.join(output_dir, 'labels', split_name, quality_tag)
             output_label_path = os.path.join(output_label_dir,
