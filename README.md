@@ -6,6 +6,7 @@ Files and guides to reproduce the experiments of the paper "No-Trade-Off Quality
 Mukeun Choi_1 and Taeyeon Oh_2*
 
 * 1 : Seoul AI School, aSSIST University, Seoul, Republic of Korea
+* 1 : SDG Management School, Geneva, Swiss
 * 2 : Seoul AI School, aSSIST University, Seoul, Republic of Korea
 * \* : Corresponding Author
 
@@ -37,6 +38,9 @@ Mukeun Choi_1 and Taeyeon Oh_2*
 | `README.md` | This File |
 | `requirements.txt` | Library installation information required to run in a local environment |
 
+## 🖼️ Multi-Quality Image Sample
+<img src="https://github.com/Mark77aSSIST/multi-quality-training/blob/main/experiments/quality_demo_0000002_00005_d_0000014.jpg">
+
 ## 🔥 Key Results
 
 | Quality | Standard Training | Multi-Quality Training | Improvement |
@@ -47,7 +51,6 @@ Mukeun Choi_1 and Taeyeon Oh_2*
 | Q80 | 0.408 | 0.410 | +0.4% |
 | Q100 | 0.404 | 0.406 | +0.4% |
 | **Avg** | **0.366** | **0.390** | **+6.5%** |
-| **Std** | **0.066** | **0.028** | **-58.2%** |
 
 ## 🚀 Quick Start
 1) Login to Google Colab environment (A100 GPU 40GB RAM)
@@ -64,8 +67,8 @@ We provide pre-trained models for reproducibility:
 
 | Model | Training Data | Q20 mAP | Q100 mAP | Download |
 |-------|---------------|---------|----------|----------|
-| YOLOv8m-Standard | Q100 only | 0.236 | 0.404 | [Link](#) |
-| YOLOv8m-MultiQuality | Q20-Q100 | **0.337** | **0.406** | [Link](#) |
+| YOLOv8m-Standard | Q100 only | 0.236 | 0.404 | [Link](https://github.com/Mark77aSSIST/multi-quality-training/blob/main/models/standard) |
+| YOLOv8m-MultiQuality | Q20-Q100 | **0.337** | **0.406** | [Link](https://github.com/Mark77aSSIST/multi-quality-training/blob/main/models/multiQuality) |
 
 **Usage:**
 ```python
@@ -93,14 +96,18 @@ results = model.predict('path/to/image.jpg', conf=0.25)
 
 | Parameter | Value |
 |-----------|-------|
-| Input size | 640×640 |
-| Batch size | 48 |
-| Initial LR | 0.06 |
-| Optimizer | SGD (momentum=0.937) |
-| Weight decay | 0.0005 |
-| Epochs | 100 (early stopping) |
-| Warmup epochs | 3 |
-| Mixed precision | FP16 (AMP) |
+| Input Size | 640×640 |
+| Batch Size | 48 |
+| Initial LR (lr0) | 0.06 |
+| Optimizer | SGD (momentum=0.9) |
+| Weight Decay | 0.0005 |
+| Training Epochs | 100 (early stopping; patient 50) |
+| Warmup Epochs | 3 |
+| Warmup Momentum | 0.8 |
+| Warmup bias Learning Rate | 0.1 |
+| Workers | 8 |
+| Random Seed | 42 |
+| Mixed Precision | FP16 (AMP) |
 
 ## ✅ Raw Data Source
 
